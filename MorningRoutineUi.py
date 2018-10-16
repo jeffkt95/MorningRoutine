@@ -1,24 +1,26 @@
 from tkinter import *
 from Calendar import Calendar
-
 import Utilities
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
+import webbrowser
+from ToolTip import ToolTip
 
 class MorningRoutineUi():
     APPLICATION_NAME = "Morning Routine"
+    GOOGLE_CALENDAR_URL = "https://calendar.google.com"
     totalGridWidth = 2
 
-    def __init__(self, master):
+    def __init__(self, master, fitnessCalendar, studyCalendar):
         self.master = master
+        self.fitnessCalendar = fitnessCalendar
+        self.studyCalendar = studyCalendar
+        
         self.master.title(self.APPLICATION_NAME)
-
         frame = Frame(master)
         frame.pack()
         
         currentRow = 0
-        
-        #topLabel.grid(row=currentRow, column=0, columnspan=self.totalGridWidth)
 
         #Row 1
         #checkbox with label
@@ -40,8 +42,9 @@ class MorningRoutineUi():
         #Row 3
         currentRow = currentRow + 1
         #Exercise text field, multi-line, row span 3
-        exerciseText = ScrolledText(frame, width=32, height=10)
-        exerciseText.grid(row=currentRow, column=0, rowspan=3, columnspan=2, sticky="w")
+        self.exerciseText = ScrolledText(frame, width=32, height=10)
+        self.exerciseText.grid(row=currentRow, column=0, rowspan=3, columnspan=2, sticky="w")
+        exerciseTextTooltip = ToolTip(self.exerciseText, "First line will be the event summary. Subsequent lines will be the event description.")
         #HEW wod button
         hewWodButton = Button(frame, text="Get WOD from HEW website")
         hewWodButton.grid(row=currentRow, column=2, columnspan=2, sticky="nw")
@@ -79,11 +82,17 @@ class MorningRoutineUi():
         #Row 8
         currentRow = currentRow + 1
         #Study text field, multi-line, row span 3
-        studyText = ScrolledText(frame, width=32, height=10)
-        studyText.grid(row=currentRow, column=0, columnspan=2, sticky="w")
+        self.studyText = ScrolledText(frame, width=32, height=10)
+        self.studyText.grid(row=currentRow, column=0, columnspan=2, sticky="w")
+        studyTextTooltip = ToolTip(self.studyText, "First line will be the event summary. Subsequent lines will be the event description.")
         
         #Row 9
         currentRow = currentRow + 1
+        #Open calendar on log
+        self.openCalendarChecked = IntVar(value=1)
+        openCalendarCheckbox = Checkbutton(frame, text="Open calendar after log", variable=self.openCalendarChecked)
+        openCalendarCheckbox.grid(row=currentRow, column=0, sticky="w")
+        
         #Log and close button
         logAndCloseButton = Button(frame, text="Log and close", command=self.logAndCloseButtonAction)
         logAndCloseButton.grid(row=currentRow, column=2, sticky="w")
@@ -95,7 +104,21 @@ class MorningRoutineUi():
         self.master.destroy()
 
     def logAndCloseButtonAction(self):
-        print("TODO: Log")
+        if (self.logExerciseChecked.get() == 1):
+            exerciseSummary = self.exerciseText.get("1.0", '1.end')
+            exerciseDescription = self.exerciseText.get("2.0", 'end-1c')
+            exerciseDateFormatted = Utilities.convertToGoogleDateFormat(self.exerciseDateVariable.get())
+            self.fitnessCalendar.addAllDayEvent(exerciseSummary, exerciseDescription, exerciseDateFormatted)
+        
+        if (self.logStudyChecked.get() == 1):
+            studySummary = self.studyText.get("1.0", '1.end')
+            studyDescription = self.studyText.get("2.0", 'end-1c')
+            studyDateFormatted = Utilities.convertToGoogleDateFormat(self.studyDateVariable.get())
+            self.studyCalendar.addAllDayEvent(studySummary, studyDescription, studyDateFormatted)
+        
+        if (self.openCalendarChecked.get() == 1):
+            webbrowser.open(self.GOOGLE_CALENDAR_URL)
+        
         self.master.destroy()
 
     def selectDate(self, whichButton):

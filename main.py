@@ -18,7 +18,7 @@ def main():
     #eventId = studyCalendar.addAllDayEvent("Test study", "Test aa a a a a Description", "2018-11-03")
 
     root = Tk()
-    app = MorningRoutineUi(root)
+    app = MorningRoutineUi(root, fitnessCalendar, studyCalendar)
     root.mainloop()
     
 if __name__ == "__main__":
