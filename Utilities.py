@@ -1,4 +1,5 @@
 import datetime
+import calendar
 
 def getTodaysDateAsStr():
     today = datetime.datetime.today()
@@ -32,6 +33,17 @@ def convertToGoogleDateFormat(dateStr):
     
     return year + "-" + month + "-" + day
      
+#Converts 2008-01-10 to Jan-10-08
+#         0123456789
+def convertGoogleDateToHewDate(dateStr):
+     year = dateStr[2:4]
+     month = dateStr[5:7]
+     day = dateStr[8:]
+     
+     monthShort = calendar.month_abbr[int(month)]
+     
+     return monthShort + "-" + day + "-" + year
+     
 def main():
     print("Today's date is " + getTodaysDateAsStr())
     print("Yesterday's date is " + getYesterdaysDateAsStr())
@@ -53,6 +65,18 @@ def main():
 
     dateBefore = "Homer/Simpson"
     print("Date before conversion: " + dateBefore + ". Date after: " + convertToGoogleDateFormat(dateBefore))
+    
+    googleDate = "2018-01-10"
+    print("Date before google-to-Hew conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewDate(googleDate))
+    
+    googleDate = "2008-12-12"
+    print("Date before google-to-Hew conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewDate(googleDate))
+    
+    googleDate = "2018-10-01"
+    print("Date before google-to-Hew conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewDate(googleDate))
+    
+    googleDate = "2018-05-05"
+    print("Date before google-to-Hew conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewDate(googleDate))
     
 if __name__ == "__main__":
     main()

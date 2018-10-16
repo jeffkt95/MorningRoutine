@@ -1,0 +1,4 @@
+All workouts for all dates seem to be inside this div
+<div class="list_carousel hp-green">
+
+The <li class="item"> children of the above has all the workouts for all the days.

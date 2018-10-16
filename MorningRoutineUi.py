@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 import webbrowser
 from ToolTip import ToolTip
+from HewWebsite import HewWebsite
 
 class MorningRoutineUi():
     APPLICATION_NAME = "Morning Routine"
@@ -46,7 +47,7 @@ class MorningRoutineUi():
         self.exerciseText.grid(row=currentRow, column=0, rowspan=3, columnspan=2, sticky="w")
         exerciseTextTooltip = ToolTip(self.exerciseText, "First line will be the event summary. Subsequent lines will be the event description.")
         #HEW wod button
-        hewWodButton = Button(frame, text="Get WOD from HEW website")
+        hewWodButton = Button(frame, text="Get WOD from HEW website", command=self.getWorkoutFromHew)
         hewWodButton.grid(row=currentRow, column=2, columnspan=2, sticky="nw")
         
         #Row 4, column 2
@@ -121,6 +122,11 @@ class MorningRoutineUi():
         
         self.master.destroy()
 
+    def getWorkoutFromHew(self):
+        workoutDate = Utilities.convertToGoogleDateFormat(self.exerciseDateVariable.get())
+        hewWebsite = HewWebsite()
+        self.exerciseText.insert(END, hewWebsite.getWodAsString(workoutDate))
+    
     def selectDate(self, whichButton):
         if(whichButton == "exercise"):
             calendar = Calendar(tk.Toplevel(), self.setExerciseDate)
