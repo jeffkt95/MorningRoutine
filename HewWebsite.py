@@ -28,7 +28,6 @@ class HewWebsite:
         
         for workout in self.workouts:
             if (workout.getDate() == hewFormattedDate):
-                print("Found workout for date " + hewFormattedDate + "! Workout title is " + workout.getTitle())
                 return workout
     
         print("Unable to find workout for " + hewFormattedDate + ". Returning None.")

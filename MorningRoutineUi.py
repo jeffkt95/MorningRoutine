@@ -6,6 +6,7 @@ from tkinter.scrolledtext import ScrolledText
 import webbrowser
 from ToolTip import ToolTip
 from HewWebsite import HewWebsite
+import subprocess
 
 class MorningRoutineUi():
     APPLICATION_NAME = "Morning Routine"
@@ -94,7 +95,14 @@ class MorningRoutineUi():
         openCalendarCheckbox = Checkbutton(frame, text="Open calendar after log", variable=self.openCalendarChecked)
         openCalendarCheckbox.grid(row=currentRow, column=0, sticky="w")
         
+        #Row 10
+        currentRow = currentRow + 1
+        self.launchAllAccountsUpdate = IntVar(value=1)
+        launchAllAccountsUpdateCheckbox = Checkbutton(frame, text="Launch AllAccountsUpdate script", variable=self.launchAllAccountsUpdate)
+        launchAllAccountsUpdateCheckbox.grid(row=currentRow, column=0, sticky="w")
+        
         #Log and close button
+        currentRow = currentRow + 1
         logAndCloseButton = Button(frame, text="Log and close", command=self.logAndCloseButtonAction)
         logAndCloseButton.grid(row=currentRow, column=2, sticky="w")
         #cancel button
@@ -119,6 +127,9 @@ class MorningRoutineUi():
         
         if (self.openCalendarChecked.get() == 1):
             webbrowser.open(self.GOOGLE_CALENDAR_URL)
+        
+        if (self.launchAllAccountsUpdate.get() == 1):
+            subprocess.Popen("python main.py", cwd="C:/mydata/20_personal/AllMoneySpreadsheetAutomation/AllMoneySpreadsheetAutomation", shell=True)
         
         self.master.destroy()
 
