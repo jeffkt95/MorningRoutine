@@ -46,7 +46,10 @@ class MorningRoutineUi():
         #Exercise text field, multi-line, row span 3
         self.exerciseText = ScrolledText(frame, width=64, height=20)
         self.exerciseText.grid(row=currentRow, column=0, rowspan=3, columnspan=2, sticky="w")
-        exerciseTextTooltip = ToolTip(self.exerciseText, "First line will be the event summary.\nSubsequent lines will be the event description.")
+        toolTipText = ("First line will be the event summary.\n" +
+            "Subsequent lines will be the event description.\n" + 
+            "Add multiple events by putting a ';;' on its own line between them.")
+        exerciseTextTooltip = ToolTip(self.exerciseText, toolTipText)
         #HEW wod button
         hewWodButton = Button(frame, text="Get WOD from HEW website", command=self.getWorkoutFromHew)
         hewWodButton.grid(row=currentRow, column=2, columnspan=2, sticky="nw")
@@ -86,7 +89,7 @@ class MorningRoutineUi():
         #Study text field, multi-line, row span 3
         self.studyText = ScrolledText(frame, width=64, height=20)
         self.studyText.grid(row=currentRow, column=0, columnspan=2, sticky="w")
-        studyTextTooltip = ToolTip(self.studyText, "First line will be the event summary.\nSubsequent lines will be the event description.")
+        studyTextTooltip = ToolTip(self.studyText, toolTipText)
         
         #Row 9
         currentRow = currentRow + 1
