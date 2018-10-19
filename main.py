@@ -13,10 +13,6 @@ def main():
     fitnessCalendar = GoogleCalendar(googCalConnection, fitnessCalendarId)
     studyCalendar = GoogleCalendar(googCalConnection, studyCalendarId)
     
-    #eventId = mainCalendar.addAllDayEvent("Test Event Summary", "Test adsf Description", "2018-11-03")
-    #eventId = fitnessCalendar.addAllDayEvent("Test to fitness", "Test aasq33asd  assdf  Description", "2018-11-03")
-    #eventId = studyCalendar.addAllDayEvent("Test study", "Test aa a a a a Description", "2018-11-03")
-
     root = Tk()
     app = MorningRoutineUi(root, fitnessCalendar, studyCalendar)
     root.mainloop()

@@ -44,9 +44,9 @@ class MorningRoutineUi():
         #Row 3
         currentRow = currentRow + 1
         #Exercise text field, multi-line, row span 3
-        self.exerciseText = ScrolledText(frame, width=32, height=10)
+        self.exerciseText = ScrolledText(frame, width=64, height=20)
         self.exerciseText.grid(row=currentRow, column=0, rowspan=3, columnspan=2, sticky="w")
-        exerciseTextTooltip = ToolTip(self.exerciseText, "First line will be the event summary. Subsequent lines will be the event description.")
+        exerciseTextTooltip = ToolTip(self.exerciseText, "First line will be the event summary.\nSubsequent lines will be the event description.")
         #HEW wod button
         hewWodButton = Button(frame, text="Get WOD from HEW website", command=self.getWorkoutFromHew)
         hewWodButton.grid(row=currentRow, column=2, columnspan=2, sticky="nw")
@@ -84,9 +84,9 @@ class MorningRoutineUi():
         #Row 8
         currentRow = currentRow + 1
         #Study text field, multi-line, row span 3
-        self.studyText = ScrolledText(frame, width=32, height=10)
+        self.studyText = ScrolledText(frame, width=64, height=20)
         self.studyText.grid(row=currentRow, column=0, columnspan=2, sticky="w")
-        studyTextTooltip = ToolTip(self.studyText, "First line will be the event summary. Subsequent lines will be the event description.")
+        studyTextTooltip = ToolTip(self.studyText, "First line will be the event summary.\nSubsequent lines will be the event description.")
         
         #Row 9
         currentRow = currentRow + 1
@@ -112,19 +112,31 @@ class MorningRoutineUi():
     def cancelButtonAction(self):
         self.master.destroy()
 
+    def addEventsToCalendar(self, calendar, textFromTextField, date):
+        eventsArray = Utilities.getTitleDescriptionArray(textFromTextField)
+        
+        for event in eventsArray:
+            if (len(event) > 0):
+                title = event[0]
+                if (len(event) > 1):
+                    description = event[1]
+                else:
+                    description = ""
+                calendar.addAllDayEvent(title, description, date)
+        
+        
     def logAndCloseButtonAction(self):
         if (self.logExerciseChecked.get() == 1):
-            exerciseSummary = self.exerciseText.get("1.0", '1.end')
-            exerciseDescription = self.exerciseText.get("2.0", 'end-1c')
-            exerciseDateFormatted = Utilities.convertToGoogleDateFormat(self.exerciseDateVariable.get())
-            self.fitnessCalendar.addAllDayEvent(exerciseSummary, exerciseDescription, exerciseDateFormatted)
+            textFromTextField = self.exerciseText.get("1.0", 'end-1c')
+            dateOfEvents = Utilities.convertToGoogleDateFormat(self.exerciseDateVariable.get())
+            self.addEventsToCalendar(self.fitnessCalendar, textFromTextField, dateOfEvents)
         
         if (self.logStudyChecked.get() == 1):
-            studySummary = self.studyText.get("1.0", '1.end')
-            studyDescription = self.studyText.get("2.0", 'end-1c')
-            studyDateFormatted = Utilities.convertToGoogleDateFormat(self.studyDateVariable.get())
-            self.studyCalendar.addAllDayEvent(studySummary, studyDescription, studyDateFormatted)
-        
+            textFromTextField = self.studyText.get("1.0", 'end-1c')
+            calendarToUpdate = self.studyCalendar
+            dateOfEvents = Utilities.convertToGoogleDateFormat(self.studyDateVariable.get())
+            self.addEventsToCalendar(self.studyCalendar, textFromTextField, dateOfEvents)
+                
         if (self.openCalendarChecked.get() == 1):
             webbrowser.open(self.GOOGLE_CALENDAR_URL)
         

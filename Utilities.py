@@ -43,7 +43,34 @@ def convertGoogleDateToHewDate(dateStr):
      monthShort = calendar.month_abbr[int(month)]
      
      return monthShort + "-" + day + "-" + year
+
+#Takes text field input and turns it into an array of events. Expects format:
+#Event title 1
+#Event 1 description line 1
+#Event 1 description line 2
+#;;
+#Event title 2
+#Event 2 description line 1
+#Event 2 description line 2
+#;;
+#Event title 3
+#Event 3 description line 1
+#Event 3 description line 2
+def getTitleDescriptionArray(str):
+    events = str.split(";;")
+    eventArray = []
+    for event in events:
+        #Remove any leading line feeds
+        if (event[:1] == '\n'):
+            event = event[1:]
+            
+        #Splits on the new line. First element is title, second is description
+        newEvent = event.split('\n', 1)
+        eventArray.append(newEvent)
+        
+    return eventArray
      
+
 def main():
     print("Today's date is " + getTodaysDateAsStr())
     print("Yesterday's date is " + getYesterdaysDateAsStr())
@@ -78,6 +105,44 @@ def main():
     googleDate = "2018-05-05"
     print("Date before google-to-Hew conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewDate(googleDate))
     
+    events = (
+        "Event title 1\n" + 
+        "Event 1 description line 1\n" + 
+        "Event 1 description line 2\n" + 
+        ";;\n" + 
+        "Event title 2\n" + 
+        "Event 2 description line 1\n" + 
+        "Event 2 description line 2\n" + 
+        ";;\n" + 
+        "Event title 3\n" + 
+        "Event 3 description line 1\n" + 
+        "Event 3 description line 2\n") 
+    eventArray = getTitleDescriptionArray(events)
+    print("Events input: " + events)
+    print("Event array: " + str(eventArray))
+
+    #Missing descriptions
+    events = (
+        "Event title 1\n" + 
+        ";;\n" + 
+        "Event title 2\n" + 
+        ";;\n" + 
+        "Event title 3\n" + 
+        "Event 3 description line 2\n")
+    eventArray = getTitleDescriptionArray(events)
+    print("Events input: " + events)
+    print("Event array: " + str(eventArray))
+
+    #Just one event
+    events = (
+        "Event title 1\n" + 
+        "Event 1 description line 1\n" + 
+        "Event 1 description line 2")
+    eventArray = getTitleDescriptionArray(events)
+    print("Events input: " + events)
+    print("Event array: " + str(eventArray))
+
+
 if __name__ == "__main__":
     main()
     
