@@ -44,7 +44,7 @@ class MorningRoutineUi():
         #Row 3
         currentRow = currentRow + 1
         #Exercise text field, multi-line, row span 3
-        self.exerciseText = ScrolledText(frame, width=64, height=20)
+        self.exerciseText = ScrolledText(frame, width=64, height=19)
         self.exerciseText.grid(row=currentRow, column=0, rowspan=3, columnspan=2, sticky="w")
         toolTipText = ("First line will be the event summary.\n" +
             "Subsequent lines will be the event description.\n" + 
@@ -87,7 +87,7 @@ class MorningRoutineUi():
         #Row 8
         currentRow = currentRow + 1
         #Study text field, multi-line, row span 3
-        self.studyText = ScrolledText(frame, width=64, height=20)
+        self.studyText = ScrolledText(frame, width=64, height=19)
         self.studyText.grid(row=currentRow, column=0, columnspan=2, sticky="w")
         studyTextTooltip = ToolTip(self.studyText, toolTipText)
         
