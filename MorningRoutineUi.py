@@ -11,6 +11,7 @@ import subprocess
 class MorningRoutineUi():
     APPLICATION_NAME = "Morning Routine"
     GOOGLE_CALENDAR_URL = "https://calendar.google.com"
+    DAILY_GOALS_URL = "https://docs.google.com/spreadsheets/d/1X8YEja5RX3p4y--ACK-iQaN2NpC9KrpiZg1QmS79WDY"
     totalGridWidth = 2
 
     def __init__(self, master, fitnessCalendar, studyCalendar):
@@ -98,6 +99,12 @@ class MorningRoutineUi():
         openCalendarCheckbox = Checkbutton(frame, text="Open calendar after log", variable=self.openCalendarChecked)
         openCalendarCheckbox.grid(row=currentRow, column=0, sticky="w")
         
+        #Row 9, column 2
+        #Open daily goals
+        self.openDailyGoalsChecked = IntVar(value=1)
+        openDailyGoalsCheckbox = Checkbutton(frame, text="Open daily goals", variable=self.openDailyGoalsChecked)
+        openDailyGoalsCheckbox.grid(row=currentRow, column=1, sticky="w")
+        
         #Row 10
         currentRow = currentRow + 1
         self.launchAllAccountsUpdate = IntVar(value=1)
@@ -143,6 +150,9 @@ class MorningRoutineUi():
         if (self.openCalendarChecked.get() == 1):
             webbrowser.open(self.GOOGLE_CALENDAR_URL)
         
+        if (self.openDailyGoalsChecked.get() == 1):
+            webbrowser.open(self.DAILY_GOALS_URL)
+
         if (self.launchAllAccountsUpdate.get() == 1):
             subprocess.Popen("python main.py", cwd="C:/mydata/20_personal/AllMoneySpreadsheetAutomation/AllMoneySpreadsheetAutomation", shell=True)
         
@@ -150,8 +160,8 @@ class MorningRoutineUi():
 
     def getWorkoutFromHew(self):
         workoutDate = Utilities.convertToGoogleDateFormat(self.exerciseDateVariable.get())
-        hewWebsite = HewWebsite()
-        self.exerciseText.insert(END, hewWebsite.getWodAsString(workoutDate))
+        hewWebsite = HewWebsite(workoutDate)
+        self.exerciseText.insert(END, hewWebsite.getWodAsString())
     
     def selectDate(self, whichButton):
         if(whichButton == "exercise"):

@@ -44,6 +44,18 @@ def convertGoogleDateToHewDate(dateStr):
      
      return monthShort + "-" + day + "-" + year
 
+#Converts 2008-01-10 to 1/10/08
+#         0123456789
+def convertGoogleDateToHewUrlDate(dateStr):
+     year = dateStr[2:4]
+     month = dateStr[5:7]
+     day = dateStr[8:]
+     
+     monthShort = calendar.month_abbr[int(month)]
+     
+     return str(int(month)) + "/" + str(int(day)) + "/" + year
+
+
 #Takes text field input and turns it into an array of events. Expects format:
 #Event title 1
 #Event 1 description line 1
@@ -103,8 +115,17 @@ def main():
     print("Date before google-to-Hew conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewDate(googleDate))
     
     googleDate = "2018-05-05"
-    print("Date before google-to-Hew conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewDate(googleDate))
+    print("Date before google-to-Hew_URL conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewDate(googleDate))
     
+    googleDate = "2008-12-12"
+    print("Date before google-to-Hew_URL conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewUrlDate(googleDate))
+    
+    googleDate = "2018-10-01"
+    print("Date before google-to-Hew_URL conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewUrlDate(googleDate))
+    
+    googleDate = "2018-05-05"
+    print("Date before google-to-Hew_URL conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewUrlDate(googleDate))
+
     events = (
         "Event title 1\n" + 
         "Event 1 description line 1\n" + 
