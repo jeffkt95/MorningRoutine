@@ -1,4 +1,5 @@
 from GoogleCalendarConnection import GoogleCalendarConnection
+import Utilities
 
 class GoogleCalendar:
     def __init__(self, googleCalendarConnection, calendarName):
@@ -6,6 +7,9 @@ class GoogleCalendar:
         self.calendarName = calendarName
         
     def addAllDayEvent(self, eventSummary, eventDescription, eventDate):
+        #For all day events, Google prefers to have the end date be the day after the start date. In other words,
+        #the end date is exclusive.
+        dayAfterEventDate = Utilities.getNextDateFromGoogleDate(eventDate)
         event = {
           'summary': eventSummary,
           'description': eventDescription,
@@ -13,7 +17,7 @@ class GoogleCalendar:
             'date': eventDate
           },
           'end': {
-            'date': eventDate
+            'date': dayAfterEventDate
           },
         }    
 

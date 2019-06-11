@@ -143,7 +143,6 @@ class MorningRoutineUi():
         
         if (self.logStudyChecked.get() == 1):
             textFromTextField = self.studyText.get("1.0", 'end-1c')
-            calendarToUpdate = self.studyCalendar
             dateOfEvents = Utilities.convertToGoogleDateFormat(self.studyDateVariable.get())
             self.addEventsToCalendar(self.studyCalendar, textFromTextField, dateOfEvents)
                 

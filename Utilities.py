@@ -9,6 +9,14 @@ def getYesterdaysDateAsStr():
     yesterday = datetime.datetime.today() - datetime.timedelta(1)
     return str(yesterday.month) + "/" + str(yesterday.day) + "/" + str(yesterday.year)
 
+def getTomorrowsDateAsStr():
+    tomorrow = datetime.datetime.today() + datetime.timedelta(1)
+    return str(tomorrow.month) + "/" + str(tomorrow.day) + "/" + str(tomorrow.year)
+
+def getNextDayAsStr(dateArg):
+    nextDay = dateArg + datetime.timedelta(1)
+    return str(nextDay.month) + "/" + str(nextDay.day) + "/" + str(nextDay.year)
+
 #Converts from MM/DD/YYYY to YYYY-MM-DD. Required for google api call
 #              0123456789
 def convertToGoogleDateFormat(dateStr):
@@ -55,6 +63,15 @@ def convertGoogleDateToHewUrlDate(dateStr):
      
      return str(int(month)) + "/" + str(int(day)) + "/" + year
 
+def getNextDateFromGoogleDate(dateStr):
+     year = dateStr[:4]
+     month = dateStr[5:7]
+     day = dateStr[8:]
+     
+     dateArg = datetime.datetime(int(year), int(month), int(day))
+     
+     nextDay = dateArg + datetime.timedelta(1)
+     return convertToGoogleDateFormat(str(nextDay.month) + "/" + str(nextDay.day) + "/" + str(nextDay.year))
 
 #Takes text field input and turns it into an array of events. Expects format:
 #Event title 1
@@ -86,6 +103,8 @@ def getTitleDescriptionArray(str):
 def main():
     print("Today's date is " + getTodaysDateAsStr())
     print("Yesterday's date is " + getYesterdaysDateAsStr())
+    print("Tomorrow's date is " + getTomorrowsDateAsStr())
+    print("Next day arg test " + getNextDayAsStr(datetime.datetime.today()))
     
     dateBefore = "10/1/2018"
     print("Date before conversion: " + dateBefore + ". Date after: " + convertToGoogleDateFormat(dateBefore))
@@ -125,6 +144,15 @@ def main():
     
     googleDate = "2018-05-05"
     print("Date before google-to-Hew_URL conversion: " + googleDate + ". Date after: " + convertGoogleDateToHewUrlDate(googleDate))
+
+    googleDate = "2019-06-11"
+    print("Date before getNextDateFromGoogleDate conversion: " + googleDate + ". Date after: " + getNextDateFromGoogleDate(googleDate))
+
+    googleDate = "2019-06-30"
+    print("Date before getNextDateFromGoogleDate conversion: " + googleDate + ". Date after: " + getNextDateFromGoogleDate(googleDate))
+
+    googleDate = "2019-12-31"
+    print("Date before getNextDateFromGoogleDate conversion: " + googleDate + ". Date after: " + getNextDateFromGoogleDate(googleDate))
 
     events = (
         "Event title 1\n" + 
