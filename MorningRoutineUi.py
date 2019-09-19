@@ -10,24 +10,26 @@ import subprocess
 
 class MorningRoutineUi():
     APPLICATION_NAME = "Morning Routine"
-    GOOGLE_CALENDAR_URL = "https://calendar.google.com"
-    DAILY_GOALS_URL = "https://docs.google.com/spreadsheets/d/1X8YEja5RX3p4y--ACK-iQaN2NpC9KrpiZg1QmS79WDY"
     totalGridWidth = 2
 
-    def __init__(self, master, fitnessCalendar, studyCalendar):
+    def __init__(self, master, fitnessCalendar, studyCalendar, sitesToOpenProcessor):
         self.master = master
         self.fitnessCalendar = fitnessCalendar
         self.studyCalendar = studyCalendar
+        self.sitesToOpenProcessor = sitesToOpenProcessor
         
         self.master.title(self.APPLICATION_NAME)
         frame = Frame(master)
         frame.pack()
         
+        #Variable to easily change default status of all check boxes. Useful for debugging.
+        defaultCheckBoxStatus = 1
+        
         currentRow = 0
 
         #Row 1
         #checkbox with label
-        self.logExerciseChecked = IntVar(value=1)
+        self.logExerciseChecked = IntVar(value=defaultCheckBoxStatus)
         logExerciseCheckbox = Checkbutton(frame, text="Log exercise in Google calendar for", variable=self.logExerciseChecked)
         logExerciseCheckbox.grid(row=currentRow, column=0, sticky="w")
         #Date chooser
@@ -45,32 +47,32 @@ class MorningRoutineUi():
         #Row 3
         currentRow = currentRow + 1
         #Exercise text field, multi-line, row span 3
-        self.exerciseText = ScrolledText(frame, width=64, height=19)
+        self.exerciseText = ScrolledText(frame, width=55, height=5)
         self.exerciseText.grid(row=currentRow, column=0, rowspan=3, columnspan=2, sticky="w")
         toolTipText = ("First line will be the event summary.\n" +
             "Subsequent lines will be the event description.\n" + 
             "Add multiple events by putting a ';;' on its own line between them.")
         exerciseTextTooltip = ToolTip(self.exerciseText, toolTipText)
         #HEW wod button
-        hewWodButton = Button(frame, text="Get WOD from HEW website", command=self.getWorkoutFromHew)
-        hewWodButton.grid(row=currentRow, column=2, columnspan=2, sticky="nw")
+        #hewWodButton = Button(frame, text="Get WOD from HEW website", command=self.getWorkoutFromHew)
+        #hewWodButton.grid(row=currentRow, column=2, columnspan=2, sticky="nw")
         
         #Row 4, column 2
         currentRow = currentRow + 1
         #Runkeeper button
-        runkeeperButton = Button(frame, text="Get from Runkeeper")
-        runkeeperButton.grid(row=currentRow, column=2, columnspan=2, sticky="nw")
+        #runkeeperButton = Button(frame, text="Get from Runkeeper")
+        #runkeeperButton.grid(row=currentRow, column=2, columnspan=2, sticky="nw")
         
         #Row 5, column 2
         currentRow = currentRow + 1
         #MyFitnessPal button
-        mfpButton = Button(frame, text="Get from MyFitnessPal")
-        mfpButton.grid(row=currentRow, column=2, columnspan=2, sticky="nw")
+        #mfpButton = Button(frame, text="Get from MyFitnessPal")
+        #mfpButton.grid(row=currentRow, column=2, columnspan=2, sticky="nw")
         
         #Row 6
         currentRow = currentRow + 1
         #checkbox with label
-        self.logStudyChecked = IntVar(value=1)
+        self.logStudyChecked = IntVar(value=defaultCheckBoxStatus)
         logStudyCheckbox = Checkbutton(frame, text="Log study in Google calendar for", variable=self.logStudyChecked)
         logStudyCheckbox.grid(row=currentRow, column=0, sticky="w")
         #Date chooser
@@ -87,37 +89,41 @@ class MorningRoutineUi():
         
         #Row 8
         currentRow = currentRow + 1
-        #Study text field, multi-line, row span 3
-        self.studyText = ScrolledText(frame, width=64, height=19)
+        #Study text field, multi-line
+        self.studyText = ScrolledText(frame, width=55, height=5)
         self.studyText.grid(row=currentRow, column=0, columnspan=2, sticky="w")
         studyTextTooltip = ToolTip(self.studyText, toolTipText)
         
         #Row 9
         currentRow = currentRow + 1
-        #Open calendar on log
-        self.openCalendarChecked = IntVar(value=1)
-        openCalendarCheckbox = Checkbutton(frame, text="Open calendar after log", variable=self.openCalendarChecked)
-        openCalendarCheckbox.grid(row=currentRow, column=0, sticky="w")
-        
-        #Row 9, column 2
-        #Open daily goals
-        self.openDailyGoalsChecked = IntVar(value=1)
-        openDailyGoalsCheckbox = Checkbutton(frame, text="Open daily goals", variable=self.openDailyGoalsChecked)
-        openDailyGoalsCheckbox.grid(row=currentRow, column=1, sticky="w")
+        #Study label
+        sitesToOpenLabel = Label(frame, text="Sites to open")
+        sitesToOpenLabel.grid(row=currentRow, column=0, sticky="w")
         
         #Row 10
         currentRow = currentRow + 1
-        self.launchAllAccountsUpdate = IntVar(value=1)
+        #Sites to open text field, multi-line
+        self.sitesToOpenText = ScrolledText(frame, width=55, height=21)
+        self.sitesToOpenText.grid(row=currentRow, column=0, columnspan=2, sticky="w")
+        self.sitesToOpenText.insert(END, self.sitesToOpenProcessor.getFileContent())
+        toolTipText = ("List URLs for sites to open.\n" +
+            "Comment out a line with #.\n" + 
+            "Changes are auto-saved.")
+        sitesToOpenTextTooltip = ToolTip(self.sitesToOpenText, toolTipText)
+        
+        #Row 11
+        currentRow = currentRow + 1
+        self.launchAllAccountsUpdate = IntVar(value=defaultCheckBoxStatus)
         launchAllAccountsUpdateCheckbox = Checkbutton(frame, text="Launch AllAccountsUpdate script", variable=self.launchAllAccountsUpdate)
         launchAllAccountsUpdateCheckbox.grid(row=currentRow, column=0, sticky="w")
         
         #Log and close button
         currentRow = currentRow + 1
         logAndCloseButton = Button(frame, text="Log and close", command=self.logAndCloseButtonAction)
-        logAndCloseButton.grid(row=currentRow, column=2, sticky="w")
+        logAndCloseButton.grid(row=currentRow, column=0, sticky="w")
         #cancel button
         cancelButton = Button(frame, text="Cancel", command=self.cancelButtonAction)
-        cancelButton.grid(row=currentRow, column=3, sticky="w")
+        cancelButton.grid(row=currentRow, column=1, sticky="e")
         
     def cancelButtonAction(self):
         self.master.destroy()
@@ -146,14 +152,13 @@ class MorningRoutineUi():
             dateOfEvents = Utilities.convertToGoogleDateFormat(self.studyDateVariable.get())
             self.addEventsToCalendar(self.studyCalendar, textFromTextField, dateOfEvents)
                 
-        if (self.openCalendarChecked.get() == 1):
-            webbrowser.open(self.GOOGLE_CALENDAR_URL)
-        
-        if (self.openDailyGoalsChecked.get() == 1):
-            webbrowser.open(self.DAILY_GOALS_URL)
-
         if (self.launchAllAccountsUpdate.get() == 1):
             subprocess.Popen("python main.py", cwd="C:/mydata/20_personal/AllMoneySpreadsheetAutomation/AllMoneySpreadsheetAutomation", shell=True)
+        
+        textFromTextField = self.sitesToOpenText.get("1.0", 'end-1c')
+        self.sitesToOpenProcessor.openSites(textFromTextField)
+        
+        self.sitesToOpenProcessor.writeFileContent(textFromTextField)
         
         self.master.destroy()
 
