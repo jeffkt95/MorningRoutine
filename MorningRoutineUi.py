@@ -126,6 +126,9 @@ class MorningRoutineUi():
         cancelButton.grid(row=currentRow, column=1, sticky="e")
         
     def cancelButtonAction(self):
+        #Even though you cancelled, save changes to sitesToOpenText
+        textFromTextField = self.sitesToOpenText.get("1.0", 'end-1c')
+        self.sitesToOpenProcessor.writeFileContent(textFromTextField)
         self.master.destroy()
 
     def addEventsToCalendar(self, calendar, textFromTextField, date):
