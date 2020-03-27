@@ -113,7 +113,7 @@ class MorningRoutineUi():
         
         #Row 11
         currentRow = currentRow + 1
-        self.launchAllAccountsUpdate = IntVar(value=defaultCheckBoxStatus)
+        self.launchAllAccountsUpdate = IntVar(value=0)
         launchAllAccountsUpdateCheckbox = Checkbutton(frame, text="Launch AllAccountsUpdate script", variable=self.launchAllAccountsUpdate)
         launchAllAccountsUpdateCheckbox.grid(row=currentRow, column=0, sticky="w")
         
